@@ -4,12 +4,14 @@
         protected $datab;
         private $username = "root";
         private $password = "";
+        private $driver = "mysql";
         private $host = "localhost";
         private $dbname = "users";
+        private $dns = "$this->driver:Server=$this->host;Database=$this->dbname";
 
         # métodos abstractos para ABM de clases que hereden 
         abstract protected static function buscarForId($id);
-	   abstract protected static function buscar($query);
+        abstract protected static function buscar($query);
         abstract protected static function getAll();
         abstract protected function insertar();
         abstract protected function editar();
@@ -17,8 +19,12 @@
 
         public function __construct(){
             $this->isConnected = true;
-            try { 
-                $this->datab = new PDO("mysql:host={$this->host};dbname={$this->dbname};charset=utf8", $this->username, $this->password, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')); 
+            try {
+                $this->datab = new PDO(
+                    ($this->driver != "sqlsrv") ? "$this->driver:host={$this->host};dbname={$this->dbname};charset=utf8" : 
+                    "$this->driver:Server=$this->host;Database=$this->dbname", 
+                    $this->username, $this->password, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')
+                ); 
                 $this->datab->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
                 $this->datab->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             }catch(PDOException $e) { 
