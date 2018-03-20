@@ -7,7 +7,6 @@
         private $driver = "mysql";
         private $host = "localhost";
         private $dbname = "users";
-        private $dns = "$this->driver:Server=$this->host;Database=$this->dbname";
 
         # métodos abstractos para ABM de clases que hereden 
         abstract protected static function buscarForId($id);
